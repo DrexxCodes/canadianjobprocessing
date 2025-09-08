@@ -2,7 +2,6 @@
 <html>
 
 <head>
-    <!-- Site made with Mobirise Website Builder v6.0.1, https://mobirise.com -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="generator" content="Mobirise v6.0.1, mobirise.com">
@@ -27,37 +26,372 @@
     <noscript>
         <link rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Inter+Tight:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap">
-        </noscript>
+    </noscript>
     <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css?v=gPOoAY">
     <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css?v=gPOoAY" type="text/css">
 
-  <style>
-    .survey-container {
-      max-width: 900px;        /* limit maximum width */
-      margin: 40px auto;       /* center and add top/bottom spacing */
-      padding: 15px;           /* inner spacing */
-      background: #ffffff;     /* clean white background */
-      border-radius: 10px;     /* rounded corners */
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* subtle shadow */
-    }
+    <style>
+        .survey-container {
+            max-width: 900px;
+            /* limit maximum width */
+            margin: 40px auto;
+            /* center and add top/bottom spacing */
+            padding: 15px;
+            /* inner spacing */
+            background: #ffffff;
+            /* clean white background */
+            border-radius: 10px;
+            /* rounded corners */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            /* subtle shadow */
+        }
 
-    .survey-container iframe {
-      width: 100%;
-      height: 90vh;           /* take 80% of viewport height */
-      border: none;           /* remove default border */
-      border-radius: 8px;     /* smooth edges */
-    }
+        .survey-container iframe {
+            width: 100%;
+            height: 90vh;
+            /* take 80% of viewport height */
+            border: none;
+            /* remove default border */
+            border-radius: 8px;
+            /* smooth edges */
+        }
 
-    /* Responsive tweak */
-    @media (max-width: 600px) {
-      .survey-container {
-        padding: 10px;
-      }
-      .survey-container iframe {
-        height: 70vh;
-      }
-    }
-  </style>
+        /* Responsive tweak */
+        @media (max-width: 600px) {
+            .survey-container {
+                padding: 10px;
+            }
+
+            .survey-container iframe {
+                height: 70vh;
+            }
+        }
+
+        .containers {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2d5a27, #4a9960);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d5a27;
+            font-size: 1.1rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4a9960;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(74, 153, 96, 0.1);
+        }
+
+        /* Country Search Dropdown */
+        .country-container {
+            position: relative;
+        }
+
+        .country-search {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: #fafafa;
+            transition: all 0.3s ease;
+        }
+
+        .country-search:focus {
+            outline: none;
+            border-color: #4a9960;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(74, 153, 96, 0.1);
+        }
+
+        .country-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #4a9960;
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .country-option {
+            padding: 12px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.2s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .country-option:hover {
+            background: #f8fff8;
+        }
+
+        .country-option:last-child {
+            border-bottom: none;
+        }
+
+        .flag {
+            width: 24px;
+            height: auto;
+            border-radius: 2px;
+        }
+
+        /* New styles for the CV selection buttons */
+        .cv-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .cv-btn {
+            padding: 12px 25px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: #f8fff8;
+            color: #3d7c47;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+        }
+
+        .cv-btn:hover {
+            background: #f0f9f0;
+            border-color: #3d7c47;
+        }
+
+        .cv-btn.active {
+            background: #4a9960;
+            color: white;
+            border-color: #3d7c47;
+            box-shadow: 0 4px 15px rgba(74, 153, 96, 0.2);
+        }
+
+        /* CV Section with Flip Animation */
+        .cv-section-container {
+            perspective: 1000px;
+            height: 140px;
+            position: relative;
+        }
+
+        .cv-section {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s ease-in-out;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+        }
+
+        .cv-section.file-section {
+            transform: rotateY(0deg);
+        }
+
+        .cv-section.link-section {
+            transform: rotateY(180deg);
+        }
+
+        .cv-section-container.show-link .file-section {
+            transform: rotateY(-180deg);
+        }
+
+        .cv-section-container.show-link .link-section {
+            transform: rotateY(0deg);
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 15px;
+            background: #f8fff8;
+            border: 2px dashed #4a9960;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #4a9960;
+            font-weight: 600;
+        }
+
+        .file-upload-label:hover {
+            background: #f0f9f0;
+            border-color: #3d7c47;
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .link-section input {
+            margin-bottom: 10px;
+        }
+
+        .link-info {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #4a9960, #3d7c47);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 153, 96, 0.3);
+            background: linear-gradient(135deg, #3d7c47, #2d5a27);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            color: #4a9960;
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-message {
+            display: none;
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .container {
+                margin: 10px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .form-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
 
 
 </head>
@@ -109,12 +443,104 @@
     </section>
 
     <section data-bs-version="5.1" class="article9 cid-uVV1kCKyRy" id="article09-p">
+        <div class="container">
+            <div class="header">
+                <h1>Job Application</h1>
+                <p>Join our growing team of professionals</p>
+            </div>
 
+            <div class="form-container">
+                <form id="applicationForm">
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div>
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div>
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="form-group">
+                        <label for="countrySearch">Country *</label>
+                        <div class="country-container">
+                            <input type="text" id="countrySearch" name="countrySearch" class="country-search"
+                                placeholder="Search for your country..." autocomplete="off" required>
+                            <div class="country-dropdown" id="countryDropdown"></div>
+                            <input type="hidden" id="selectedCountry" name="country">
+                        </div>
+                    </div>
 
- <div class="survey-container">
-    <iframe src="https://surveyheart.com/form/6266c615be7a46512b74efa1" allowfullscreen></iframe>
-  </div>
+                    <div class="form-group">
+                        <label for="position">Work Position *</label>
+                        <input type="text" id="position" name="position" required
+                            placeholder="e.g. Software Developer, Marketing Manager">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="whatsapp">WhatsApp Number *</label>
+                        <input type="tel" id="whatsapp" name="whatsapp" required placeholder="+1 234 567 8900">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="motivation">Why should you be considered? *</label>
+                        <textarea id="motivation" name="motivation" rows="6" required
+                            placeholder="Tell us about your experience, skills, and what makes you a great fit for this position..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>CV Submission (Optional)</label>
+                        <div class="cv-buttons">
+                            <button type="button" id="uploadFileBtn" class="cv-btn active">📄 Upload File</button>
+                            <button type="button" id="provideLinkBtn" class="cv-btn">🔗 Provide Link</button>
+                        </div>
+
+                        <div class="cv-section-container" id="cvSectionContainer">
+                            <div class="cv-section file-section">
+                                <div class="file-upload">
+                                    <input type="file" id="cvFile" name="cvFile" accept=".pdf,.doc,.docx">
+                                    <label for="cvFile" class="file-upload-label">
+                                        Click to upload your CV (PDF, DOC, DOCX)
+                                    </label>
+                                    <div class="file-name" id="fileName"></div>
+                                </div>
+                            </div>
+
+                            <div class="cv-section link-section">
+                                <input type="url" id="cvLink" name="cvLink"
+                                    placeholder="https://yourwebsite.com/cv or https://linkedin.com/in/yourprofile">
+                                <div class="link-info">
+                                    💡 You can provide a link to your online CV, LinkedIn profile, or portfolio
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">Submit Application</button>
+
+                    <div class="loading" id="loading">
+                        <p>Submitting your application...</p>
+                    </div>
+
+                    <div class="success-message" id="successMessage">
+                        <strong>Success!</strong> Your application has been submitted successfully. We'll be in touch
+                        soon!
+                    </div>
+
+                    <div class="error-message" id="errorMessage">
+                        <strong>Error!</strong> <span id="errorText">Something went wrong. Please try again.</span>
+                    </div>
+                </form>
+            </div>
+        </div>
     </section>
 
     <section data-bs-version="5.1" class="start article05 cid-uW3C3meBgH mbr-parallax-background" id="article05-y">
@@ -151,6 +577,24 @@
         </div>
     </section>
 
+    <section data-bs-version="5.1" class="article12 cid-uW919xJg78" id="article12-z">
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 col-lg-10">
+                    <h3 class="mbr-section-title mbr-fonts-style mb-4 mt-0 display-5"><strong>PROCESSING FEE</strong>
+                    </h3>
+
+                    <p class="mbr-text mbr-fonts-style display-7">Any Applicant Applying work under <strong>
+                        CANADIAN FRUIT
+                            PRODUCE COMPANY​
+                    </strong>
+                        will be paying for their PROCESSING FEE which is amount of <span style="color: red;">200.62 CAD</span>. Note: The fee will be
+                        refunded back along with the first monthly salary.h</p>
+                </div>
+            </div>
+        </div>
+    </section>
     <section data-bs-version="5.1" class="article12 cid-uW919xJg78" id="article12-z">
 
         <div class="container">
@@ -259,6 +703,9 @@
         </div>
     </section>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-firestore-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-storage-compat.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/parallax/jarallax.js"></script>
     <script src="assets/web/assets/cookies-alert-plugin/cookies-alert-core.js"></script>
@@ -268,6 +715,251 @@
     <script src="assets/dropdown/js/navbar-dropdown.js"></script>
     <script src="assets/theme/js/script.js"></script>
 
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBnA5VAidJ20mtaoikC4p0oJyq6Ji2h-qU",
+            authDomain: "coding-squad-249f7.firebaseapp.com",
+            databaseURL: "https://coding-squad-249f7-default-rtdb.firebaseio.com",
+            projectId: "coding-squad-249f7",
+            storageBucket: "coding-squad-249f7.appspot.com",
+            messagingSenderId: "385893863935",
+            appId: "1:385893863935:web:e7b73f4deb14eef6d197ca"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
+        // Global variables for countries
+        let allCountries = [];
+        let selectedCountryData = null;
+
+        // Load countries with flags
+        async function loadCountries() {
+            try {
+                const response = await fetch('https://restcountries.com/v3.1/all?fields=name,flag,cca2');
+                const countries = await response.json();
+
+                allCountries = countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
+                console.log('Countries loaded:', allCountries.length);
+            } catch (error) {
+                console.error('Error loading countries:', error);
+                document.getElementById('countrySearch').placeholder = 'Error loading countries';
+            }
+        }
+
+        // Country search functionality
+        function setupCountrySearch() {
+            const countrySearch = document.getElementById('countrySearch');
+            const countryDropdown = document.getElementById('countryDropdown');
+            const selectedCountryInput = document.getElementById('selectedCountry');
+
+            countrySearch.addEventListener('input', function () {
+                const searchTerm = this.value.toLowerCase().trim();
+
+                if (searchTerm.length === 0) {
+                    countryDropdown.style.display = 'none';
+                    selectedCountryInput.value = '';
+                    selectedCountryData = null;
+                    return;
+                }
+
+                const filteredCountries = allCountries.filter(country =>
+                    country.name.common.toLowerCase().includes(searchTerm)
+                );
+
+                displayCountries(filteredCountries);
+            });
+
+            countrySearch.addEventListener('focus', function () {
+                if (this.value.trim().length > 0) {
+                    const searchTerm = this.value.toLowerCase().trim();
+                    const filteredCountries = allCountries.filter(country =>
+                        country.name.common.toLowerCase().includes(searchTerm)
+                    );
+                    displayCountries(filteredCountries);
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!countrySearch.contains(e.target) && !countryDropdown.contains(e.target)) {
+                    countryDropdown.style.display = 'none';
+                }
+            });
+        }
+
+        function displayCountries(countries) {
+            const countryDropdown = document.getElementById('countryDropdown');
+
+            if (countries.length === 0) {
+                countryDropdown.innerHTML = '<div class="country-option">No countries found</div>';
+                countryDropdown.style.display = 'block';
+                return;
+            }
+
+            countryDropdown.innerHTML = '';
+
+            countries.slice(0, 10).forEach(country => {
+                const option = document.createElement('div');
+                option.className = 'country-option';
+                option.innerHTML =
+                    `<span class="flag">${country.flag}</span><span>${country.name.common}</span>`;
+
+                option.addEventListener('click', function () {
+                    selectCountry(country);
+                });
+
+                countryDropdown.appendChild(option);
+            });
+
+            countryDropdown.style.display = 'block';
+        }
+
+        function selectCountry(country) {
+            const countrySearch = document.getElementById('countrySearch');
+            const countryDropdown = document.getElementById('countryDropdown');
+            const selectedCountryInput = document.getElementById('selectedCountry');
+
+            countrySearch.value = `${country.flag} ${country.name.common}`;
+            selectedCountryInput.value = country.name.common;
+            selectedCountryData = country;
+            countryDropdown.style.display = 'none';
+        }
+
+        // Function to handle CV button clicks and flip animation
+        function setupCVButtons() {
+            const uploadBtn = document.getElementById('uploadFileBtn');
+            const linkBtn = document.getElementById('provideLinkBtn');
+            const cvSectionContainer = document.getElementById('cvSectionContainer');
+            const cvFile = document.getElementById('cvFile');
+            const cvLink = document.getElementById('cvLink');
+
+            // Initially set both as optional
+            cvFile.required = false;
+            cvLink.required = false;
+
+            uploadBtn.addEventListener('click', () => {
+                uploadBtn.classList.add('active');
+                linkBtn.classList.remove('active');
+                cvSectionContainer.classList.remove('show-link');
+            });
+
+            linkBtn.addEventListener('click', () => {
+                linkBtn.classList.add('active');
+                uploadBtn.classList.remove('active');
+                cvSectionContainer.classList.add('show-link');
+            });
+        }
+
+        // File upload preview
+        function setupFileUpload() {
+            document.getElementById('cvFile').addEventListener('change', function (e) {
+                const fileName = document.getElementById('fileName');
+                if (e.target.files.length > 0) {
+                    fileName.textContent = `Selected: ${e.target.files[0].name}`;
+                    fileName.style.color = '#4a9960';
+                } else {
+                    fileName.textContent = '';
+                }
+            });
+        }
+
+        // Form submission
+        function setupFormSubmission() {
+            document.getElementById('applicationForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                const submitBtn = document.getElementById('submitBtn');
+                const loading = document.getElementById('loading');
+                const successMessage = document.getElementById('successMessage');
+                const errorMessage = document.getElementById('errorMessage');
+
+                if (!selectedCountryData) {
+                    alert('Please select a valid country from the dropdown');
+                    return;
+                }
+
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+                loading.style.display = 'block';
+                submitBtn.disabled = true;
+
+                try {
+                    const formData = new FormData(e.target);
+                    let cvUrl = '';
+                    const isLinkMode = document.getElementById('provideLinkBtn').classList.contains(
+                        'active');
+
+                    if (isLinkMode) {
+                        cvUrl = formData.get('cvLink') || '';
+                    } else {
+                        const file = formData.get('cvFile');
+                        if (file && file.size > 0) {
+                            const timestamp = Date.now();
+                            const fileName = `cvs/${timestamp}_${file.name}`;
+                            const storageRef = storage.ref(fileName);
+                            const snapshot = await storageRef.put(file);
+                            cvUrl = await snapshot.ref.getDownloadURL();
+                        }
+                    }
+
+                    const applicationData = {
+                        firstName: formData.get('firstName'),
+                        lastName: formData.get('lastName'),
+                        fullName: `${formData.get('firstName')} ${formData.get('lastName')}`,
+                        country: selectedCountryData.name.common,
+                        countryFlag: selectedCountryData.flag,
+                        countryCode: selectedCountryData.cca2,
+                        position: formData.get('position'),
+                        email: formData.get('email'),
+                        whatsapp: formData.get('whatsapp'),
+                        motivation: formData.get('motivation'),
+                        cvUrl: cvUrl,
+                        cvType: isLinkMode ? 'link' : 'upload',
+                        submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        status: 'pending'
+                    };
+
+                    await db.collection('applications').add(applicationData);
+
+                    loading.style.display = 'none';
+                    successMessage.style.display = 'block';
+
+                    e.target.reset();
+                    document.getElementById('fileName').textContent = '';
+                    document.getElementById('countrySearch').value = '';
+                    document.getElementById('selectedCountry').value = '';
+                    selectedCountryData = null;
+
+                    document.getElementById('uploadFileBtn').classList.add('active');
+                    document.getElementById('provideLinkBtn').classList.remove('active');
+                    document.getElementById('cvSectionContainer').classList.remove('show-link');
+
+                    successMessage.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                } catch (error) {
+                    console.error('Error submitting application:', error);
+                    loading.style.display = 'none';
+                    errorMessage.style.display = 'block';
+                    document.getElementById('errorText').textContent = error.message ||
+                        'Something went wrong. Please try again.';
+                } finally {
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            await loadCountries();
+            setupCountrySearch();
+            setupCVButtons();
+            setupFileUpload();
+            setupFormSubmission();
+        });
+    </script>
 
     <input name="cookieData" type="hidden" data-cookie-cookiesAlertType='false' data-cookie-customDialogSelector='null'
         data-cookie-colorText='#424a4d' data-cookie-colorBg='rgb(255, 255, 255)' data-cookie-opacityOverlay='0'
