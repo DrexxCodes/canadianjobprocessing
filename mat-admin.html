@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Applications Admin</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #2d5a27 0%, #3d7c47 50%, #4a9960 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease-out;
+      min-height: calc(100vh - 40px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header {
+      background: linear-gradient(135deg, #2d5a27, #4a9960);
+      color: white;
+      padding: 30px 40px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .main-content {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .applications-sidebar {
+      width: 350px;
+      background: #f8fff8;
+      border-right: 2px solid #e8f5e8;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      background: #f0f9f0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .sidebar-header h2 {
+      color: #2d5a27;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .stat-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .stat-badge.pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .stat-badge.reviewed {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .applications-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .application-item {
+      padding: 15px;
+      margin-bottom: 8px;
+      background: white;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .application-item:hover {
+      border-color: #4a9960;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(74, 153, 96, 0.1);
+    }
+
+    .application-item.active {
+      border-color: #4a9960;
+      background: linear-gradient(135deg, #f8fff8, #f0f9f0);
+      box-shadow: 0 4px 20px rgba(74, 153, 96, 0.2);
+    }
+
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .app-name {
+      font-weight: 700;
+      color: #2d5a27;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 15px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-badge.pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-badge.reviewed {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .app-info {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .app-date {
+      font-size: 0.8rem;
+      color: #999;
+    }
+
+    .details-panel {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+      background: white;
+    }
+
+    .no-selection {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #999;
+      text-align: center;
+    }
+
+    .no-selection-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      opacity: 0.3;
+    }
+
+    .applicant-details {
+      display: none;
+    }
+
+    .applicant-details.active {
+      display: block;
+    }
+
+    .detail-section {
+      background: #fafafa;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border-left: 4px solid #4a9960;
+    }
+
+    .detail-section h3 {
+      color: #2d5a27;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .detail-row {
+      display: flex;
+      margin-bottom: 12px;
+      align-items: flex-start;
+    }
+
+    .detail-label {
+      font-weight: 600;
+      color: #555;
+      min-width: 120px;
+      margin-right: 15px;
+    }
+
+    .detail-value {
+      color: #333;
+      flex: 1;
+    }
+
+    .motivation-text {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1rem;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4a9960, #3d7c47);
+      color: white;
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #28a745, #20a039);
+      color: white;
+    }
+
+    .btn-warning {
+      background: linear-gradient(135deg, #ffc107, #e0a800);
+      color: #212529;
+    }
+
+    .btn-info {
+      background: linear-gradient(135deg, #17a2b8, #138496);
+      color: white;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      color: #4a9960;
+    }
+
+    .message {
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      display: none;
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    /* Email Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 600px;
+      position: relative;
+      animation: modalSlideIn 0.3s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .close:hover {
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #2d5a27;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #4a9960;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 768px) {
+      .container {
+        margin: 10px;
+        min-height: calc(100vh - 20px);
+      }
+
+      .header {
+        padding: 20px;
+      }
+
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .main-content {
+        flex-direction: column;
+      }
+
+      .applications-sidebar {
+        width: 100%;
+        max-height: 300px;
+      }
+
+      .details-panel {
+        padding: 20px;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .btn {
+        justify-content: center;
+        text-align: center;
+      }
+
+      .modal-content {
+        margin: 10% auto;
+        padding: 20px;
+        width: 95%;
+      }
+
+      .app-header {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+      }
+
+      .stats {
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .applications-sidebar {
+        max-height: 250px;
+      }
+
+      .stat-badge {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+      }
+
+      .application-item {
+        padding: 12px;
+      }
+
+      .app-name {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Job Applications Admin</h1>
+      <p>Manage and review job applications</p>
+    </div>
+
+    <div class="main-content">
+      <div class="applications-sidebar">
+        <div class="sidebar-header">
+          <h2>Applications</h2>
+          <div class="stats">
+            <div class="stat-badge pending">
+              <span id="pendingCount">0</span> Pending
+            </div>
+            <div class="stat-badge reviewed">
+              <span id="reviewedCount">0</span> Reviewed
+            </div>
+          </div>
+        </div>
+        <div class="applications-list" id="applicationsList">
+          <div class="loading" style="display: block;">
+            <p>Loading applications...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="details-panel">
+        <div class="no-selection" id="noSelection">
+          <div class="no-selection-icon">📋</div>
+          <h3>Select an application to view details</h3>
+          <p>Choose an application from the list to see applicant information</p>
+        </div>
+
+        <div class="applicant-details" id="applicantDetails">
+          <!-- Details will be populated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Email Modal -->
+  <div id="emailModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 style="color: #2d5a27; margin-bottom: 20px;">📧 Email Applicant</h2>
+      <form id="emailForm">
+        <div class="form-group">
+          <label for="emailTo">To:</label>
+          <input type="email" id="emailTo" readonly>
+        </div>
+        <div class="form-group">
+          <label for="emailSubject">Subject:</label>
+          <input type="text" id="emailSubject" value="Regarding your job application" required>
+        </div>
+        <div class="form-group">
+          <label for="emailMessage">Message:</label>
+          <textarea id="emailMessage" rows="8" placeholder="Write your message here..." required></textarea>
+        </div>
+        <div style="display: flex; gap: 15px; justify-content: flex-end;">
+          <button type="button" class="btn" style="background: #6c757d; color: white;" onclick="closeEmailModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Send Email</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="message success" id="successMessage"></div>
+  <div class="message error" id="errorMessage"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app-compat.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-firestore-compat.min.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBnA5VAidJ20mtaoikC4p0oJyq6Ji2h-qU",
+      authDomain: "coding-squad-249f7.firebaseapp.com",
+      databaseURL: "https://coding-squad-249f7-default-rtdb.firebaseio.com",
+      projectId: "coding-squad-249f7",
+      storageBucket: "coding-squad-249f7.appspot.com",
+      messagingSenderId: "385893863935",
+      appId: "1:385893863935:web:e7b73f4deb14eef6d197ca"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    let applications = [];
+    let selectedApplication = null;
+
+    // Load applications from Firestore
+    async function loadApplications() {
+      try {
+        const snapshot = await db.collection('applications').orderBy('submittedAt', 'desc').get();
+        applications = [];
+        
+        snapshot.forEach((doc) => {
+          applications.push({
+            id: doc.id,
+            ...doc.data()
+          });
+        });
+
+        displayApplications();
+        updateStats();
+      } catch (error) {
+        console.error('Error loading applications:', error);
+        showMessage('Error loading applications: ' + error.message, 'error');
+      }
+    }
+
+    // Display applications in sidebar
+    function displayApplications() {
+      const applicationsList = document.getElementById('applicationsList');
+      
+      if (applications.length === 0) {
+        applicationsList.innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">No applications found</div>';
+        return;
+      }
+
+      applicationsList.innerHTML = applications.map(app => {
+        const submittedDate = app.submittedAt ? new Date(app.submittedAt.seconds * 1000) : new Date();
+        const dateString = submittedDate.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        return `
+          <div class="application-item" onclick="selectApplication('${app.id}')">
+            <div class="app-header">
+              <div class="app-name">
+                ${app.countryFlag || '🌍'} ${app.fullName || 'Unknown'}
+              </div>
+              <div class="status-badge ${app.status || 'pending'}">
+                ${app.status || 'pending'}
+              </div>
+            </div>
+            <div class="app-info">📍 ${app.country || 'Unknown'}</div>
+            <div class="app-info">💼 ${app.position || 'No position specified'}</div>
+            <div class="app-date">📅 ${dateString}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Update statistics
+    function updateStats() {
+      const pendingCount = applications.filter(app => app.status === 'pending' || !app.status).length;
+      const reviewedCount = applications.filter(app => app.status === 'reviewed').length;
+      
+      document.getElementById('pendingCount').textContent = pendingCount;
+      document.getElementById('reviewedCount').textContent = reviewedCount;
+    }
+
+    // Select and display application details
+    function selectApplication(applicationId) {
+      selectedApplication = applications.find(app => app.id === applicationId);
+      
+      if (!selectedApplication) return;
+
+      // Update active state
+      document.querySelectorAll('.application-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      event.target.closest('.application-item').classList.add('active');
+
+      // Show details
+      document.getElementById('noSelection').style.display = 'none';
+      document.getElementById('applicantDetails').style.display = 'block';
+      document.getElementById('applicantDetails').classList.add('active');
+
+      displayApplicationDetails(selectedApplication);
+    }
+
+    // Display application details
+    function displayApplicationDetails(application) {
+      const submittedDate = application.submittedAt ? new Date(application.submittedAt.seconds * 1000) : new Date();
+      const dateString = submittedDate.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      const cvSection = application.cvUrl ? `
+        <div class="detail-section">
+          <h3>📄 CV/Resume</h3>
+          <div class="detail-row">
+            <div class="detail-label">Type:</div>
+            <div class="detail-value">${application.cvType === 'link' ? 'External Link' : 'Uploaded File'}</div>
+          </div>
+          <div class="action-buttons">
+            ${application.cvType === 'link' ? 
+              `<a href="${application.cvUrl}" target="_blank" class="btn btn-info">🔗 View CV Link</a>` :
+              `<a href="${application.cvUrl}" target="_blank" class="btn btn-info">📁 View CV File</a>`
+            }
+          </div>
+        </div>
+      ` : '<div class="detail-section"><h3>📄 CV/Resume</h3><p style="color: #999; font-style: italic;">No CV provided</p></div>';
+
+      document.getElementById('applicantDetails').innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+          <h2 style="color: #2d5a27; display: flex; align-items: center; gap: 10px;">
+            ${application.countryFlag || '🌍'} ${application.fullName || 'Unknown Applicant'}
+          </h2>
+          <div class="status-badge ${application.status || 'pending'}" style="font-size: 1rem; padding: 8px 16px;">
+            ${application.status || 'pending'}
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>👤 Personal Information</h3>
+          <div class="detail-row">
+            <div class="detail-label">Full Name:</div>
+            <div class="detail-value">${application.fullName || 'N/A'}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Email:</div>
+            <div class="detail-value">
+              <a href="mailto:${application.email}" style="color: #4a9960; text-decoration: none;">
+                ${application.email || 'N/A'}
+              </a>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">WhatsApp:</div>
+            <div class="detail-value">
+              <a href="https://wa.me/${application.whatsapp?.replace(/\s+/g, '')}" target="_blank" style="color: #4a9960; text-decoration: none;">
+                ${application.whatsapp || 'N/A'}
+              </a>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Country:</div>
+            <div class="detail-value">${application.countryFlag || '🌍'} ${application.country || 'N/A'}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Position:</div>
+            <div class="detail-value"><strong>${application.position || 'N/A'}</strong></div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>💭 Motivation</h3>
+          <div class="motivation-text">${application.motivation || 'No motivation provided'}</div>
+        </div>
+
+        ${cvSection}
+
+        <div class="detail-section">
+          <h3>📊 Application Info</h3>
+          <div class="detail-row">
+            <div class="detail-label">Application ID:</div>
+            <div class="detail-value"><code>${application.id}</code></div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Submitted:</div>
+            <div class="detail-value">${dateString}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Status:</div>
+            <div class="detail-value">
+              <span class="status-badge ${application.status || 'pending'}">
+                ${application.status || 'pending'}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          ${(application.status !== 'reviewed') ? 
+            `<button class="btn btn-success" onclick="updateStatus('${application.id}', 'reviewed')">
+              ✅ Mark as Reviewed
+            </button>` : 
+            `<button class="btn btn-warning" onclick="updateStatus('${application.id}', 'pending')">
+              ↩️ Mark as Pending
+            </button>`
+          }
+          <button class="btn btn-primary" onclick="openEmailModal('${application.email}', '${application.fullName}')">
+            📧 Email Applicant
+          </button>
+        </div>
+      `;
+    }
+
+    // Update application status
+    async function updateStatus(applicationId, newStatus) {
+      try {
+        await db.collection('applications').doc(applicationId).update({
+          status: newStatus,
+          lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        // Update local data
+        const appIndex = applications.findIndex(app => app.id === applicationId);
+        if (appIndex !== -1) {
+          applications[appIndex].status = newStatus;
+        }
+
+        displayApplications();
+        updateStats();
+        
+        if (selectedApplication && selectedApplication.id === applicationId) {
+          selectedApplication.status = newStatus;
+          displayApplicationDetails(selectedApplication);
+        }
+
+        showMessage(`Application status updated to ${newStatus}`, 'success');
+      } catch (error) {
+        console.error('Error updating status:', error);
+        showMessage('Error updating status: ' + error.message, 'error');
+      }
+    }
+
+    // Email modal functions
+    function openEmailModal(email, name) {
+      document.getElementById('emailTo').value = email;
+      document.getElementById('emailSubject').value = `Application for Canadian Fruit - ${name}`;
+      document.getElementById('emailModal').style.display = 'block';
+    }
+
+    function closeEmailModal() {
+      document.getElementById('emailModal').style.display = 'none';
+      document.getElementById('emailForm').reset();
+    }
+
+    // Handle email form submission
+    document.getElementById('emailForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const to = document.getElementById('emailTo').value;
+      const subject = document.getElementById('emailSubject').value;
+      const message = document.getElementById('emailMessage').value;
+      
+      // Create Gmail compose URL with pre-filled data
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+      
+      const emailData = {
+        to: to,
+        subject: subject,
+        message: message,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      try {
+        // Save email record to Firestore for tracking
+        await db.collection('emails').add(emailData);
+        
+        // Open Gmail with pre-filled compose window
+        window.open(gmailUrl, '_blank');
+        
+        showMessage('Gmail opened with pre-filled email. Email record saved successfully!', 'success');
+        closeEmailModal();
+      } catch (error) {
+        console.error('Error logging email:', error);
+        showMessage('Error saving email record: ' + error.message, 'error');
+        
+        // Even if saving fails, still open Gmail
+        window.open(gmailUrl, '_blank');
+      }
+    });
+
+    // Show success/error messages
+    function showMessage(message, type) {
+      const messageEl = document.getElementById(type === 'success' ? 'successMessage' : 'errorMessage');
+      messageEl.textContent = message;
+      messageEl.style.display = 'block';
+      
+      setTimeout(() => {
+        messageEl.style.display = 'none';
+      }, 5000);
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('emailModal');
+      if (event.target === modal) {
+        closeEmailModal();
+      }
+    }
+
+    // Close modal with X button
+    document.querySelector('.close').onclick = closeEmailModal;
+
+    // Initialize the admin panel
+    document.addEventListener('DOMContentLoaded', function() {
+      loadApplications();
+      
+      // Refresh applications every 30 seconds
+      setInterval(loadApplications, 30000);
+    });
+  </script>
+</body>
+
+</html>
